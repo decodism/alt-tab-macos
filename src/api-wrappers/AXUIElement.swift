@@ -240,6 +240,14 @@ extension AXUIElement {
     func closeButton() throws -> AXUIElement? {
         return try attribute(kAXCloseButtonAttribute, AXUIElement.self)
     }
+    
+    func menuItemCmdChar() throws -> String? {
+        return try attribute(kAXMenuItemCmdCharAttribute, String.self)
+    }
+    
+    func menuItemCmdModifiers() throws -> Int? {
+        return try attribute(kAXMenuItemCmdModifiersAttribute, Int.self)
+    }
 
     func focusWindow() {
         performAction(kAXRaiseAction)

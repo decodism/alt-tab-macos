@@ -15,6 +15,7 @@ class Application: NSObject {
     var pid: pid_t!
     var focusedWindow: Window? = nil
     var alreadyRequestedToQuit = false
+    var newWindowMenuItemElement: AXUIElement?
 
     init(_ runningApplication: NSRunningApplication) {
         self.runningApplication = runningApplication
@@ -37,6 +38,7 @@ class Application: NSObject {
                 self.observeEventsIfEligible()
             },
         ]
+        detectNewWindowMenuItem()
     }
 
     deinit {
@@ -135,6 +137,10 @@ class Application: NSObject {
             alreadyRequestedToQuit = true
         }
     }
+    
+    func newWindow() {
+        newWindowMenuItemElement?.performAction(kAXPressAction)
+    }
 
     private func addWindow(_ axUiElement: AXUIElement, _ wid: CGWindowID, _ axTitle: String?, _ isFullscreen: Bool, _ isMinimized: Bool, _ position: CGPoint?, _ size: CGSize?) -> Window? {
         if (Windows.list.firstIndex { $0.isEqualRobust(axUiElement, wid) }) == nil {
@@ -175,5 +181,14 @@ class Application: NSObject {
             }
         }
         CFRunLoopAddSource(BackgroundWork.accessibilityEventsThread.runLoop, AXObserverGetRunLoopSource(axObserver), .defaultMode)
+    }
+    
+    private func detectNewWindowMenuItem() {
+        guard runningApplication.bundleIdentifier != App.id,
+              let menuBarItems = try? (axUiElement?.children()?.first { (try? $0.role() == kAXMenuBarRole) ?? false })?.children(),
+              menuBarItems.count >= 3,
+              let menuItems = try? menuBarItems[2].children()?.first?.children()
+        else { return }
+        newWindowMenuItemElement = menuItems.first { (try? $0.menuItemCmdChar() == "N" && $0.menuItemCmdModifiers() == 0) ?? false }
     }
 }
