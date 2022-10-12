@@ -71,7 +71,9 @@ class ATShortcut {
         }
         if scope == .local {
             if App.app.appIsBeingUsed && (index == nil || index == App.app.shortcutIndex) {
-                return true
+                if ControlsTab.shortcutTriggerable[id] == nil || ControlsTab.shortcutTriggerable[id]!() {
+                    return true
+                }
             }
         }
         return false

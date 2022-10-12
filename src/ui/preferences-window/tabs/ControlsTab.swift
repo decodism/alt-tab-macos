@@ -4,6 +4,12 @@ import ShortcutRecorder
 class ControlsTab {
     static var shortcuts = [String: ATShortcut]()
     static var shortcutControls = [String: (CustomRecorderControl, String)]()
+    static var shortcutTriggerable = [
+        "quitAppShortcut": { Windows.focusedWindow() != nil && (Windows.focusedWindow()!.application.runningApplication.bundleIdentifier != "com.apple.finder" || Preferences.finderShowsQuitMenuItem)},
+        "closeWindowShortcut": { Windows.focusedWindow() != nil && !Windows.focusedWindow()!.isWindowlessApp },
+        "minDeminWindowShortcut": { Windows.focusedWindow() != nil && !Windows.focusedWindow()!.isWindowlessApp },
+        "hideShowAppShortcut": { Windows.focusedWindow() != nil },
+    ]
     static var shortcutsActions = [
         "holdShortcut": { App.app.focusTarget() },
         "holdShortcut2": { App.app.focusTarget() },
