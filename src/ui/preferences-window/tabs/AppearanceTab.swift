@@ -31,6 +31,9 @@ class AppearanceTab {
             LabelAndControl.makeLabelWithCheckbox(NSLocalizedString("Hide colored circles on mouse hover:", comment: ""), "hideColoredCircles"),
             LabelAndControl.makeLabelWithCheckbox(NSLocalizedString("Hide app badges:", comment: ""), "hideAppBadges"),
             LabelAndControl.makeLabelWithCheckbox(NSLocalizedString("Hide apps with no open window:", comment: ""), "hideWindowlessApps"),
+            LabelAndControl.makeLabelWithCheckbox(NSLocalizedString("Show near Dock last hovered app:", comment: ""), "showNearDockLastHovered"),
+            LabelAndControl.makeLabelWithSlider(NSLocalizedString("Distance to bottom Dock last hovered app:", comment: ""), "distanceToBottomDockLastHovered", 0, 200, 11, false, "px"),
+            LabelAndControl.makeLabelWithSlider(NSLocalizedString("Distance to left or right Dock last hovered app:", comment: ""), "distanceToLeftOrRightDockLastHovered", 0, 200, 11, false, "px"),
         ])
         grid.column(at: 0).xPlacement = .trailing
         grid.fit()

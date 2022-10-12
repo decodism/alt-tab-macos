@@ -3,7 +3,7 @@ import Foundation
 class Dock {
     static var element: AXUIElement?
     static var observer: AXObserver?
-    static var lastHoveredPid: pid_t?
+    static var lastHovered: DockApp?
     
     static func observe(_ app: NSRunningApplication) {
         let appElement = AXUIElementCreateApplication(app.processIdentifier)
@@ -14,4 +14,9 @@ class Dock {
         try? Dock.element!.subscribeToNotification(Dock.observer!, kAXSelectedChildrenChangedNotification)
         CFRunLoopAddSource(BackgroundWork.accessibilityEventsThread.runLoop, AXObserverGetRunLoopSource(Dock.observer!), .defaultMode)
     }
+}
+
+struct DockApp {
+    let pid: pid_t
+    let centerPosition: CGPoint
 }

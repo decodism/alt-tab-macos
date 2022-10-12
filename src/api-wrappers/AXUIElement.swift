@@ -196,6 +196,13 @@ extension AXUIElement {
     func size() throws -> CGSize? {
         return try value(kAXSizeAttribute, CGSize.zero, .cgSize)
     }
+    
+    func frame() throws -> CGRect? {
+        guard let position = try position(),
+              let size = try size()
+        else { return nil }
+        return CGRect(origin: position, size: size)
+    }
 
     func title() throws -> String? {
         return try attribute(kAXTitleAttribute, String.self)

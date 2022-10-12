@@ -46,8 +46,18 @@ extension NSScreen {
     func repositionPanel(_ window: NSWindow, _ alignment: VerticalAlignment) {
         let screenFrame = visibleFrame
         let panelFrame = window.frame
-        let x = screenFrame.minX + max(screenFrame.width - panelFrame.width, 0) * 0.5
-        let y = screenFrame.minY + max(screenFrame.height - panelFrame.height, 0) * alignment.rawValue
+        var x: Double, y: Double
+        if Preferences.appsToShow[App.app.shortcutIndex] == .dockLastHovered, Preferences.showNearDockLastHovered, let centerPosition = Dock.lastHovered?.centerPosition {
+            let baseX = centerPosition.x - (panelFrame.width / 2)
+            let adjustedX = max(min(baseX, screenFrame.maxX - panelFrame.width), screenFrame.minX)
+            x = adjustedX + (adjustedX < baseX ? -1 : (adjustedX > baseX ? 1 : 0)) * Preferences.distanceToLeftOrRightDockLastHovered
+            let baseY = centerPosition.y - (panelFrame.height / 2)
+            let adjustedY = max(min(baseY, screenFrame.maxY - panelFrame.height), screenFrame.minY)
+            y = adjustedY + (adjustedY < baseY ? -1 : (adjustedY > baseY ? 1 : 0)) * Preferences.distanceToBottomDockLastHovered
+        } else {
+            x = screenFrame.minX + max(screenFrame.width - panelFrame.width, 0) * 0.5
+            y = screenFrame.minY + max(screenFrame.height - panelFrame.height, 0) * alignment.rawValue
+        }
         window.setFrameOrigin(NSPoint(x: x, y: y))
     }
 

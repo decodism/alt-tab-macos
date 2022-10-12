@@ -87,6 +87,9 @@ class Preferences {
         "hideAppBadges": "false",
         "hideWindowlessApps": "false",
         "hideThumbnails": "false",
+        "showNearDockLastHovered": "false",
+        "distanceToBottomDockLastHovered": "55",
+        "distanceToLeftOrRightDockLastHovered": "195",
     ]
 
     // system preferences
@@ -131,6 +134,9 @@ class Preferences {
     static var hideThumbnails: Bool { defaults.bool("hideThumbnails") }
     static var startAtLogin: Bool { defaults.bool("startAtLogin") }
     static var blacklist: [BlacklistEntry] { jsonDecode([BlacklistEntry].self, defaults.string("blacklist")) }
+    static var showNearDockLastHovered: Bool { defaults.bool("showNearDockLastHovered") }
+    static var distanceToBottomDockLastHovered: CGFloat { defaults.cgfloat("distanceToBottomDockLastHovered") }
+    static var distanceToLeftOrRightDockLastHovered: CGFloat { defaults.cgfloat("distanceToLeftOrRightDockLastHovered") }
 
     // macro values
     static var theme: ThemePreference { defaults.macroPref("theme", ThemePreference.allCases) }

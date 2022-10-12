@@ -206,12 +206,14 @@ fileprivate func windowMoved(_ element: AXUIElement) throws {
 fileprivate func dockHoveredItemChanged(_ element: AXUIElement) throws {
     guard let hoveredElement = try element.selectedChildren()?.first,
           let url = try hoveredElement.url(),
-          let pid = (NSWorkspace.shared.runningApplications.first { $0.bundleURL == url }?.processIdentifier)
+          let pid = (NSWorkspace.shared.runningApplications.first { $0.bundleURL == url }?.processIdentifier),
+          let frame = try hoveredElement.frame()
     else { return }
     DispatchQueue.main.async {
-        let pids = [Dock.lastHoveredPid, pid]
+        let pids = [Dock.lastHovered?.pid, pid]
         let windows = Windows.list.filter { pids.contains($0.application.pid) }
-        Dock.lastHoveredPid = pid
+        let centerPosition = CGPoint(x: frame.midX, y: NSScreen.preferred().frame.maxY - frame.midY)
+        Dock.lastHovered = DockApp(pid: pid, centerPosition: centerPosition)
         App.app.refreshOpenUi(windows)
     }
 }

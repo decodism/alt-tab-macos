@@ -234,7 +234,7 @@ class Windows {
                 }
             } ?? false) &&
             !(Preferences.appsToShow[App.app.shortcutIndex] == .active && window.application.runningApplication.processIdentifier != NSWorkspace.shared.frontmostApplication?.processIdentifier) &&
-            !(Preferences.appsToShow[App.app.shortcutIndex] == .dockLastHovered && window.application.runningApplication.processIdentifier != Dock.lastHoveredPid) &&
+            !(Preferences.appsToShow[App.app.shortcutIndex] == .dockLastHovered && window.application.runningApplication.processIdentifier != Dock.lastHovered?.pid) &&
             !(!(Preferences.showHiddenWindows[App.app.shortcutIndex] != .hide) && window.isHidden) &&
             ((!Preferences.hideWindowlessApps && window.isWindowlessApp) ||
                 !window.isWindowlessApp &&
