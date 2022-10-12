@@ -16,6 +16,7 @@ class ThumbnailView: NSStackView {
     var closeIcon = TrafficLightButton(.close, NSLocalizedString("Close window", comment: ""), windowsControlSize)
     var minimizeIcon = TrafficLightButton(.miniaturize, NSLocalizedString("Minimize/Deminimize window", comment: ""), windowsControlSize)
     var maximizeIcon = TrafficLightButton(.fullscreen, NSLocalizedString("Fullscreen window", comment: ""), windowsControlSize)
+    var newIcon = TrafficLightButton(.new, NSLocalizedString("New window (⌘ + N)", comment: ""), windowsControlSize)
     var hStackView: NSStackView!
     var mouseUpCallback: (() -> Void)!
     var mouseMovedCallback: (() -> Void)!
@@ -65,7 +66,8 @@ class ThumbnailView: NSStackView {
         thumbnail.addSubview(closeIcon, positioned: .above, relativeTo: nil)
         thumbnail.addSubview(minimizeIcon, positioned: .above, relativeTo: nil)
         thumbnail.addSubview(maximizeIcon, positioned: .above, relativeTo: nil)
-        [quitIcon, closeIcon, minimizeIcon, maximizeIcon].forEach { $0.isHidden = true }
+        thumbnail.addSubview(newIcon, positioned: .above, relativeTo: nil)
+        [quitIcon, closeIcon, minimizeIcon, maximizeIcon, newIcon].forEach { $0.isHidden = true }
     }
 
     func showOrHideWindowControls(_ shouldShowWindowControls: Bool) {
@@ -75,10 +77,11 @@ class ThumbnailView: NSStackView {
             let target = (window_?.isWindowlessApp ?? true) ? windowlessIcon : thumbnail
             target.addSubview(quitIcon, positioned: .above, relativeTo: nil)
             var offset = CGFloat(0)
-            [quitIcon, closeIcon, minimizeIcon, maximizeIcon].forEach { icon in
+            [quitIcon, closeIcon, minimizeIcon, maximizeIcon, newIcon].forEach { icon in
                 icon.isHidden = !shouldShow ||
                     ((window_?.isWindowlessApp ?? true) && icon.type != .quit) ||
-                    (icon.type == .quit && window_?.application.runningApplication.bundleIdentifier == "com.apple.finder" && !Preferences.finderShowsQuitMenuItem)
+                    (icon.type == .quit && window_?.application.runningApplication.bundleIdentifier == "com.apple.finder" && !Preferences.finderShowsQuitMenuItem) ||
+                    (icon.type == .new && window_?.application.newWindowMenuItemElement == nil)
                 if !icon.isHidden {
                     icon.setFrameOrigin(NSPoint(
                         x: 3 + (ThumbnailView.windowsControlSpacing + ThumbnailView.windowsControlSize) * offset,
@@ -181,7 +184,7 @@ class ThumbnailView: NSStackView {
         }
         self.mouseUpCallback = { () -> Void in App.app.focusSelectedWindow(element) }
         self.mouseMovedCallback = { () -> Void in Windows.updateFocusedWindowIndex(index) }
-        [quitIcon, closeIcon, minimizeIcon, maximizeIcon].forEach { $0.window_ = element }
+        [quitIcon, closeIcon, minimizeIcon, maximizeIcon, newIcon].forEach { $0.window_ = element }
         showOrHideWindowControls(false)
         // force a display to avoid flickering; see https://github.com/lwouis/alt-tab-macos/issues/197
         // quirk: display() should be called last as it resets thumbnail.frame.size somehow

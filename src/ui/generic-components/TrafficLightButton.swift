@@ -29,6 +29,8 @@ class TrafficLightButton: NSButton {
             window_?.close()
         } else if (type == .quit) {
             window_?.application.quit()
+        } else if (type == .new) {
+            window_?.application.newWindow()
         }
     }
 
@@ -70,7 +72,7 @@ class TrafficLightButton: NSButton {
         return disk
     }
 
-    private func colors() -> (NSGradient, NSColor, NSColor) {
+    private func colors() -> (NSGradient, NSColor, NSColor)! {
         if NSColor.currentControlTint == .graphiteControlTint {
             return (
                 NSGradient(starting: NSColor(red: 0.57, green: 0.57, blue: 0.60, alpha: 1),
@@ -108,12 +110,23 @@ class TrafficLightButton: NSButton {
                 NSColor(red: 0.302, green: 0, blue: 0, alpha: 1)
             )
         }
-        return (
-            NSGradient(starting: NSColor(red: 0.74, green: 0.32, blue: 1, alpha: 1),
-                ending: NSColor(red: 0.77, green: 0.35, blue: 1, alpha: 1))!,
-            NSColor(red: 0.62, green: 0.23, blue: 0.88, alpha: 1),
-            NSColor(red: 0.25, green: 0, blue: 0.4, alpha: 1)
-        )
+        if type == .quit {
+            return (
+                NSGradient(starting: NSColor(red: 0.74, green: 0.32, blue: 1, alpha: 1),
+                    ending: NSColor(red: 0.77, green: 0.35, blue: 1, alpha: 1))!,
+                NSColor(red: 0.62, green: 0.23, blue: 0.88, alpha: 1),
+                NSColor(red: 0.25, green: 0, blue: 0.4, alpha: 1)
+            )
+        }
+        if type == .new {
+            return (
+                NSGradient(starting: NSColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1),
+                    ending: NSColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1))!,
+                NSColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1),
+                NSColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
+            )
+        }
+        return nil
     }
 
     private func drawSymbol(_ lineColor: NSColor) {
@@ -174,6 +187,17 @@ class TrafficLightButton: NSButton {
             symbol.line(to: NSMakePoint(bounds.width / 2, bounds.height * 0.50))
             symbol.lineWidth = 1.2
             symbol.stroke()
+        } else if (type == .new) {
+            NSGraphicsContext.current?.shouldAntialias = false
+            let symbol = NSBezierPath()
+            symbol.move(to: NSMakePoint(bounds.width * 0.25, bounds.height / 2))
+            symbol.line(to: NSMakePoint(bounds.width * 0.75, bounds.height / 2))
+            symbol.move(to: NSMakePoint(bounds.width / 2, bounds.height * 0.25))
+            symbol.line(to: NSMakePoint(bounds.width / 2, bounds.height * 0.75))
+            symbol.lineWidth = 1
+            lineColor.setStroke()
+            symbol.stroke()
+            NSGraphicsContext.current?.shouldAntialias = true
         }
     }
 }
@@ -183,6 +207,7 @@ enum TrafficLightButtonType {
     case close
     case miniaturize
     case fullscreen
+    case new
 }
 
 
