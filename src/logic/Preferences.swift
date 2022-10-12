@@ -21,6 +21,7 @@ class Preferences {
         "closeWindowShortcut": "W",
         "minDeminWindowShortcut": "M",
         "quitAppShortcut": "Q",
+        "toggleFullscreenWindowShortcut": "F",
         "hideShowAppShortcut": "H",
         "arrowKeysEnabled": "true",
         "mouseHoverEnabled": "true",
@@ -89,6 +90,7 @@ class Preferences {
     static var closeWindowShortcut: String { defaults.string("closeWindowShortcut") }
     static var minDeminWindowShortcut: String { defaults.string("minDeminWindowShortcut") }
     static var quitAppShortcut: String { defaults.string("quitAppShortcut") }
+    static var toggleFullscreenWindowShortcut: String { defaults.string("toggleFullscreenWindowShortcut") }
     static var hideShowAppShortcut: String { defaults.string("hideShowAppShortcut") }
     static var arrowKeysEnabled: Bool { defaults.bool("arrowKeysEnabled") }
     static var mouseHoverEnabled: Bool { defaults.bool("mouseHoverEnabled") }

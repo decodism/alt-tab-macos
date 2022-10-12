@@ -135,6 +135,10 @@ class App: AppCenterApplication, NSApplicationDelegate {
     func quitSelectedApp() {
         Windows.focusedWindow()?.application.quit()
     }
+    
+    func toggleFullscreenSelectedWindow() {
+        Windows.focusedWindow()?.toggleFullscreen()
+    }
 
     func hideShowSelectedApp() {
         Windows.focusedWindow()?.application.hideOrShow()

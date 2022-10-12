@@ -8,6 +8,7 @@ class ControlsTab {
         "quitAppShortcut": { Windows.focusedWindow() != nil && (Windows.focusedWindow()!.application.runningApplication.bundleIdentifier != "com.apple.finder" || Preferences.finderShowsQuitMenuItem)},
         "closeWindowShortcut": { Windows.focusedWindow() != nil && !Windows.focusedWindow()!.isWindowlessApp },
         "minDeminWindowShortcut": { Windows.focusedWindow() != nil && !Windows.focusedWindow()!.isWindowlessApp },
+        "toggleFullscreenWindowShortcut": { Windows.focusedWindow() != nil && !Windows.focusedWindow()!.isWindowlessApp },
         "hideShowAppShortcut": { Windows.focusedWindow() != nil },
     ]
     static var shortcutsActions = [
@@ -25,6 +26,7 @@ class ControlsTab {
         "closeWindowShortcut": { App.app.closeSelectedWindow() },
         "minDeminWindowShortcut": { App.app.minDeminSelectedWindow() },
         "quitAppShortcut": { App.app.quitSelectedApp() },
+        "toggleFullscreenWindowShortcut": { App.app.toggleFullscreenSelectedWindow() },
         "hideShowAppShortcut": { App.app.hideShowSelectedApp() },
     ]
     static var arrowKeysCheckbox: NSButton!
@@ -36,6 +38,7 @@ class ControlsTab {
         let closeWindowShortcut = LabelAndControl.makeLabelWithRecorder(NSLocalizedString("Close window", comment: ""), "closeWindowShortcut", Preferences.closeWindowShortcut, labelPosition: .right)
         let minDeminWindowShortcut = LabelAndControl.makeLabelWithRecorder(NSLocalizedString("Minimize/Deminimize window", comment: ""), "minDeminWindowShortcut", Preferences.minDeminWindowShortcut, labelPosition: .right)
         let quitAppShortcut = LabelAndControl.makeLabelWithRecorder(NSLocalizedString("Quit app", comment: ""), "quitAppShortcut", Preferences.quitAppShortcut, labelPosition: .right)
+        let toggleFullscreenWindowShortcut = LabelAndControl.makeLabelWithRecorder(NSLocalizedString("Toggle fullscreen window", comment: ""), "toggleFullscreenWindowShortcut", Preferences.toggleFullscreenWindowShortcut, labelPosition: .right)
         let hideShowAppShortcut = LabelAndControl.makeLabelWithRecorder(NSLocalizedString("Hide/Show app", comment: ""), "hideShowAppShortcut", Preferences.hideShowAppShortcut, labelPosition: .right)
         let enableArrows = LabelAndControl.makeLabelWithCheckbox(NSLocalizedString("Arrow keys", comment: ""), "arrowKeysEnabled", extraAction: ControlsTab.arrowKeysEnabledCallback, labelPosition: .right)
         arrowKeysCheckbox = enableArrows[0] as? NSButton
@@ -45,7 +48,7 @@ class ControlsTab {
         let selectWindowCheckboxes = StackView([StackView(enableArrows), StackView(enableMouse)], .vertical)
         let miscCheckboxesExplanations = LabelAndControl.makeLabel(NSLocalizedString("Miscellaneous:", comment: ""))
         let miscCheckboxes = StackView([StackView(enableCursorFollowFocus)], .vertical)
-        let shortcuts = StackView([focusWindowShortcut, previousWindowShortcut, cancelShortcut, closeWindowShortcut, minDeminWindowShortcut, quitAppShortcut, hideShowAppShortcut].map { (view: [NSView]) in StackView(view) }, .vertical)
+        let shortcuts = StackView([focusWindowShortcut, previousWindowShortcut, cancelShortcut, closeWindowShortcut, minDeminWindowShortcut, quitAppShortcut, toggleFullscreenWindowShortcut, hideShowAppShortcut].map { (view: [NSView]) in StackView(view) }, .vertical)
         let orPress = LabelAndControl.makeLabel(NSLocalizedString("While open, press:", comment: ""), shouldFit: false)
         let (holdShortcut, nextWindowShortcut, tab1View) = toShowSection("")
         let (holdShortcut2, nextWindowShortcut2, tab2View) = toShowSection("2")
