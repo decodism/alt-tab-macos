@@ -55,7 +55,7 @@ class Preferences {
         "alignThumbnails": AlignThumbnailsPreference.left.rawValue,
         "appsToShow": AppsToShowPreference.all.rawValue,
         "appsToShow2": AppsToShowPreference.active.rawValue,
-        "appsToShow3": AppsToShowPreference.all.rawValue,
+        "appsToShow3": AppsToShowPreference.dockLastHovered.rawValue,
         "appsToShow4": AppsToShowPreference.all.rawValue,
         "appsToShow5": AppsToShowPreference.all.rawValue,
         "spacesToShow": SpacesToShowPreference.all.rawValue,
@@ -489,11 +489,13 @@ enum ShowHowPreference: String, CaseIterable, MacroPreference {
 enum AppsToShowPreference: String, CaseIterable, MacroPreference {
     case all = "0"
     case active = "1"
+    case dockLastHovered = "2"
 
     var localizedString: LocalizedString {
         switch self {
             case .all: return NSLocalizedString("All apps", comment: "")
             case .active: return NSLocalizedString("Active app", comment: "")
+            case .dockLastHovered: return NSLocalizedString("Dock last hovered app", comment: "")
         }
     }
 }

@@ -43,7 +43,9 @@ class Applications {
 
     static func addRunningApplications(_ runningApps: [NSRunningApplication]) {
         runningApps.forEach {
-            if isActualApplication($0) {
+            if $0.bundleIdentifier == "com.apple.dock" {
+                Dock.observe($0)
+            } else if isActualApplication($0) {
                 Applications.list.append(Application($0))
             }
         }

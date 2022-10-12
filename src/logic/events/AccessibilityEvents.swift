@@ -25,6 +25,7 @@ fileprivate func handleEvent(_ type: String, _ element: AXUIElement) throws {
             case kAXTitleChangedNotification: try windowTitleChanged(element, pid)
             case kAXWindowResizedNotification: try windowResized(element)
             case kAXWindowMovedNotification: try windowMoved(element)
+            case kAXSelectedChildrenChangedNotification: try dockHoveredItemChanged(element)
             default: return
         }
     }
@@ -199,5 +200,18 @@ fileprivate func windowMoved(_ element: AXUIElement) throws {
                 App.app.refreshOpenUi([window])
             }
         }
+    }
+}
+
+fileprivate func dockHoveredItemChanged(_ element: AXUIElement) throws {
+    guard let hoveredElement = try element.selectedChildren()?.first,
+          let url = try hoveredElement.url(),
+          let pid = (NSWorkspace.shared.runningApplications.first { $0.bundleURL == url }?.processIdentifier)
+    else { return }
+    DispatchQueue.main.async {
+        let pids = [Dock.lastHoveredPid, pid]
+        let windows = Windows.list.filter { pids.contains($0.application.pid) }
+        Dock.lastHoveredPid = pid
+        App.app.refreshOpenUi(windows)
     }
 }

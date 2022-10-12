@@ -208,6 +208,10 @@ extension AXUIElement {
     func children() throws -> [AXUIElement]? {
         return try attribute(kAXChildrenAttribute, [AXUIElement].self)
     }
+    
+    func selectedChildren() throws -> [AXUIElement]? {
+        return try attribute(kAXSelectedChildrenAttribute, [AXUIElement].self)
+    }
 
     func windows() throws -> [AXUIElement]? {
         return try attribute(kAXWindowsAttribute, [AXUIElement].self)
@@ -239,6 +243,10 @@ extension AXUIElement {
 
     func closeButton() throws -> AXUIElement? {
         return try attribute(kAXCloseButtonAttribute, AXUIElement.self)
+    }
+    
+    func url() throws -> URL? {
+        return try attribute(kAXURLAttribute, URL.self)
     }
 
     func focusWindow() {
